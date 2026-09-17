@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KrishiMitra Dashboard</title>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;
+    color: #f1f1f1;
+    display: flex;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 220px;
+    background: #1b1b1b;
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-right: 1px solid #333;
+}
+#sidebar h3 {
+    margin-top: 0;
+    color: #00ff88;
+    text-align: center;
+}
+
+/* Crop boxes with emojis */
+.crop {
+    cursor: pointer;
+    background: #2c2c2c;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+}
+.crop:hover {
+    background: #00ff88;
+    color: #121212;
+}
+.crop span {
+    margin-right: 8px;
+}
+
+/* Logout Button */
+#logoutBtn {
+    background: #e74c3c;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+}
+#logoutBtn:hover {
+    background: #c0392b;
+}
+
+/* Main Content */
+#main {
+    flex: 1;
+    padding: 30px;
+    text-align: center;
+}
+
+/* Headings */
+h2 {
+    margin: 0 0 20px;
+    color: #00ff88;
+    text-align: center;
+}
+h3, h4 {
+    color: #f1f1f1;
+    margin: 8px 0;
+}
+
+/* Cards */
+.card {
+    background: #1e1e1e;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Gauge */
+#gauge {
+    width: 250px !important;
+    height: 125px !important;
+    margin: 0 auto;
+}
+#moistureText {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+/* Buttons */
+button {
+    padding: 8px 12px;
+    margin: 4px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+#setAuto { background: #00ff88; color: #121212; }
+#setManual { background: #f39c12; color: #121212; }
+#pumpOn { background: #2ecc71; color: white; }
+#pumpOff { background: #e74c3c; color: white; }
+#saveThreshold { background: #9b59b6; color: white; }
+#saveSchedule { background: #16a085; color: white; }
+
+/* Inputs */
+input[type="number"], input[type="time"], input[type="text"] {
+    padding: 8px;
+    margin: 4px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #2c2c2c;
+    color: #f1f1f1;
+    width: 100px;
+}
+input:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h3>Crops</h3>
+  <div id="cropList">
+    <div class="crop"><span>🌾</span>Wheat</div>
+    <div class="crop"><span>🌽</span>Corn</div>
+    <div class="crop"><span>🍅</span>Tomato</div>
+    <div class="crop"><span>🥬</span>Spinach</div>
+    <div class="crop"><span>🥕</span>Carrot</div>
+    <div class="crop" id="othersCrop">+ Others</div>
+  </div>
+  <button id="logoutBtn">Logout</button>
+</div>
+
+<div id="main">
+  <h2>Welcome Farmers</h2>
+  <h3>Selected Crop: <span id="selectedCrop">None</span></h3>
+
+  <div class="card">
+    <canvas id="gauge"></canvas>
+    <div id="moistureText">Soil Moisture: -- %</div>
+  </div>
+
+  <div class="card">
+    <h4>System Mode</h4>
+    <button id="setAuto">Auto</button>
+    <button id="setManual">Manual</button>
+    <div>Mode: <span id="modeText">--</span></div>
+    
+    <h4>Pump Control</h4>
+    <button id="pumpOn">Pump ON</button>
+    <button id="pumpOff">Pump OFF</button>
+    <div>Pump Status: <span id="pumpStatus">--</span></div>
+    
+    <h4>Thresholds</h4>
+    Lower: <input id="lower" type="number" min="0" max="100"> 
+    Upper: <input id="upper" type="number" min="0" max="100">
+    <button id="saveThreshold">Save</button>
+
+    <h4>Schedule Irrigation</h4>
+    Start: <input id="startTime" type="time">
+    <br><br>
+    Duration: 
+    <input id="durationMin" type="number" min="0" placeholder="Min"> min 
+    <input id="durationSec" type="number" min="0" max="59" placeholder="Sec"> sec
+    <button id="saveSchedule">Save</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

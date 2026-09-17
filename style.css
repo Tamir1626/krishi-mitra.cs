@@ -1,0 +1,133 @@
+/* Body & font */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #121212;  /* Dark background like login page */
+    color: #f1f1f1;
+    display: flex;
+}
+
+/* Sidebar */
+#sidebar {
+    width: 220px;
+    background: #1b1b1b;  /* Darker sidebar */
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border-right: 1px solid #333;
+}
+#sidebar h3 {
+    margin-top: 0;
+    color: #00ff88;  /* Green accent like login page */
+}
+.crop {
+    cursor: pointer;
+    background: #2c2c2c;  /* Dark crop boxes */
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    transition: 0.2s;
+    color: #f1f1f1;
+}
+.crop:hover {
+    background: #00ff88;
+    color: #121212;
+}
+
+/* Logout button */
+#logoutBtn {
+    background: #e74c3c;
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    cursor: pointer;
+}
+#logoutBtn:hover {
+    background: #c0392b;
+}
+
+/* Main content */
+#main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* Headings */
+h2 {
+    margin: 0 0 20px;
+    color: #00ff88; /* Green accent */
+    text-align: center; /* Center the welcome message */
+}
+h3, h4 {
+    color: #f1f1f1;
+    margin: 8px 0;
+}
+
+/* Cards */
+.card {
+    background: #1e1e1e;  /* Dark card background */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* Gauge */
+#gauge {
+    width: 200px !important; /* slightly bigger */
+    height: 100px !important;
+    display: block;
+    margin: 0 auto; /* center */
+}
+#moistureText {
+    margin-top: 10px;
+    font-size: 16px;
+    text-align: center;
+}
+
+/* Buttons */
+button {
+    padding: 8px 12px;
+    margin: 4px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Specific buttons colors */
+#setAuto { background: #00ff88; color: #121212; }
+#setManual { background: #f39c12; color: #121212; }
+#pumpOn { background: #2ecc71; color: white; }
+#pumpOff { background: #e74c3c; color: white; }
+#saveThreshold { background: #9b59b6; color: white; }
+#saveSchedule { background: #16a085; color: white; }
+
+/* Inputs */
+input[type="number"], input[type="time"], input[type="text"] {
+    padding: 8px;
+    margin: 4px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #2c2c2c;
+    color: #f1f1f1;
+    width: 100px;
+}
+input:focus {
+    outline: none;
+    border-color: #00ff88;
+}
+
+/* Crop emojis - add icons using pseudo-elements */
+.crop[data-crop="Wheat"]::before { content: "🌾 "; }
+.crop[data-crop="Corn"]::before { content: "🌽 "; }
+.crop[data-crop="Tomato"]::before { content: "🍅 "; }
+.crop[data-crop="Potato"]::before { content: "🥔 "; }
+.crop[data-crop="Others"]::before { content: "➕ "; }
